@@ -1,6 +1,6 @@
-from data_preparation.data_prep import *
-from model_training.model_train import ModelTraining
 import pandas as pd
+
+from data_preparation.data_prep import evaluate_model, train_logistic_regression, change_column_names, encode_categorical_features, replace_column_values, remove_duplicates
 
 def main():
     df = pd.read_csv("data/ObesityDataSet.csv")
