@@ -1,6 +1,7 @@
 import pandas as pd
 
-from data_preparation.data_prep import evaluate_model, train_logistic_regression, change_column_names, encode_categorical_features, replace_column_values, remove_duplicates
+from data_preparation.data_prep import change_column_names, encode_categorical_features, replace_column_values, remove_duplicates, split_data
+from model_training.model_train import train_logistic_regression, train_decision_tree, train_random_forest, evaluate_model, export_model
 
 def main():
     df = pd.read_csv("data/ObesityDataSet.csv")
@@ -42,9 +43,12 @@ def main():
     y = df['NObeyesdad']
     X_train, X_test, y_train, y_test = split_data(X, y)
 
-    model = train_logistic_regression(X_train, y_train)
-
+    #model = train_logistic_regression(X_train, y_train)
+    model = train_random_forest(X_train, y_train)
     evaluate_model(model, X_test, y_test)
+
+    file_name = "random_forest_model.pkl"
+    export_model(model, f"ml_models/{file_name}")
 
 if __name__ == "__main__":
     main()

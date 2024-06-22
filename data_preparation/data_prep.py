@@ -26,14 +26,3 @@ def replace_column_values(df, column, value_map):
 
 def split_data(X, y, test_size=0.20, random_state=101):
     return train_test_split(X, y, test_size=test_size, random_state=random_state)
-
-
-def train_logistic_regression(X_train, y_train, max_iter=50000):
-    model = LogisticRegression(max_iter=max_iter)
-    model.fit(X_train, y_train)
-    return model
-
-
-def evaluate_model(model, X_test, y_test):
-    predictions = model.predict(X_test)
-    print(classification_report(y_test, predictions))
