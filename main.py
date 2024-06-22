@@ -1,39 +1,50 @@
-from data_preparation.data_prep import Dataset
+from data_preparation.data_prep import *
 from model_training.model_train import ModelTraining
-
+import pandas as pd
 
 def main():
-    """
-    Main function to prepare the dataset, train the model, and evaluate the results.
-    """
-    dataset = Dataset('ObesityDataSet.csv')
-    cols_to_remove = []
-    cols_to_normalize = []
-    cols_to_transform = {
-        'Gender': {'Female': 0, 'Male': 1},
-        'family_history_with_overweight': {'no': 0, 'yes': 1},
-        'FAVC': {'no': 0, 'yes': 1},
-        'SMOKE': {'no': 0, 'yes': 1},
-        'CAEC': {'no': 0, 'Sometimes': 1, 'Frequently': 2, 'Always': 3},
-        'SCC': {'no': 0, 'yes': 1},
-        'CALC': {'no': 0, 'Sometimes': 1, 'Frequently': 2, 'Always': 3},
-    }
-    dataset.transform_text_values(cols_to_transform)
-    dataset.one_hot_encode('MTRANS')
-    dataset.remove_columns(cols_to_remove)
-    dataset.normalize(cols_to_normalize)
-    dataset.split_data()
+    df = pd.read_csv("data/ObesityDataSet.csv")
 
-    model_training = ModelTraining(train_set=dataset.train_set,
-                                   test_set=dataset.test_set,
-                                   target_column='NObeyesdad')
-    model_training.train_model()
-    model_training.predict()
-    accuracy, conf_matrix, class_report = model_training.evaluate_model()
+    df = remove_duplicates(df)
 
-    print("Accuracy:", accuracy)
-    print("Confusion Matrix:\n", conf_matrix)
-    print("Classification Report:\n", class_report)
+    new_column_names = {
+                        'Gender': 'gender',
+                        'Age': 'age',
+                        'Height': 'height',
+                        'Weight': 'weight',
+                        'SMOKE': 'smoke',
+                        'FAVC': 'highcal_intake',
+                        'FCVC': 'veg_intake',
+                        'NCP': 'meals_daily',
+                        'CAEC': 'snacking',
+                        'CH2O': 'water_intake_daily',
+                        'SCC': 'track_cal_intake',
+                        'FAF': 'physical_weekly',
+                        'TUE': 'tech_usage_daily',
+                        'CALC': 'alcohol_intake',
+                        'MTRANS': 'transport_mode'
+                       }
+    df = change_column_names(df, new_column_names)
+
+    categorical_features = df.select_dtypes('object').columns.drop('NObeyesdad')
+    df = encode_categorical_features(df, categorical_features)
+
+    value_map = {'Insufficient_Weight':0,
+                 'Normal_Weight':1,
+                 'Overweight_Level_I':2,
+                 'Overweight_Level_II':3,
+                 'Obesity_Type_I':4,
+                 'Obesity_Type_II':5,
+                 'Obesity_Type_III':6}
+    df = replace_column_values(df, 'NObeyesdad', value_map)
+
+    X = df.drop('NObeyesdad', axis=1)
+    y = df['NObeyesdad']
+    X_train, X_test, y_train, y_test = split_data(X, y)
+
+    model = train_logistic_regression(X_train, y_train)
+
+    evaluate_model(model, X_test, y_test)
 
 if __name__ == "__main__":
     main()
