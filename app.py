@@ -1,3 +1,4 @@
+import random
 import streamlit as st
 import base64
 import pickle
@@ -58,7 +59,7 @@ def main():
         f'<div class="img-container"><img src="data:image/png;base64,{image_base64}" alt="avocado" style="width:100%;"></div>',
         unsafe_allow_html=True
     )
-    
+
     st.markdown(
         """
         <style>
@@ -125,10 +126,6 @@ def main():
     # Encode categorical features
     input_data = encode_features(input_data)
 
-    # Display input data
-    st.write("### Input Data")
-    st.write(input_data)
-
     # Make prediction
     if st.button("Predict"):
         prediction = model.predict(input_data)
@@ -150,6 +147,17 @@ def main():
         # Display prediction
         st.write(f"## Predicted Obesity Level: **{result}**")
         st.write(f"### Confidence: **{confidence:.2f}%**")
+
+         # Add a random health tip if the weight is different than normal
+        if result != "Normal Weight":
+            health_tips = [
+                "Try to eat more fruits and vegetables.",
+                "Exercise regularly to maintain a healthy weight.",
+                "Stay hydrated by drinking plenty of water.",
+                "Reduce your intake of sugary drinks and snacks.",
+                "Ensure you get enough sleep every night."
+            ]
+            st.write(f"### Health Tip: **{random.choice(health_tips)}**")
 
 if __name__ == "__main__":
     main()
