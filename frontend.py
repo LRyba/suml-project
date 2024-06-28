@@ -51,6 +51,7 @@ def main():
         <style>
         .appview-container {{
            background: radial-gradient(circle, #3d7c6c, #1b4b53);
+           font-weight: bold;
         }}
         </style>
         """,
