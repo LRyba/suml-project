@@ -65,7 +65,7 @@ def main():
     """
     Main function to load data, preprocess it, train a model, evaluate it, and export the model.
     """
-    df = pd.read_csv("../data/ObesityDataSet.csv")
+    df = pd.read_csv("data/ObesityDataSet.csv")
     df = remove_duplicates(df)
     new_column_names = {
                         'Gender': 'gender',
@@ -101,7 +101,7 @@ def main():
     model = train_random_forest(X_train, y_train)
     evaluate_model(model, X_test, y_test)
     file_name = "random_forest_model.pkl"
-    export_model(model, f"../ml_models/{file_name}")
+    export_model(model, f"ml_models/{file_name}")
 
 if __name__ == "__main__":
     main()
