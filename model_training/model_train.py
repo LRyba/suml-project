@@ -4,9 +4,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
 
-"""
-    train and evaluate models
-"""
 def train_logistic_regression(X_train, y_train, max_iter=50000):
     model = LogisticRegression(max_iter=max_iter)
     model.fit(X_train, y_train)
