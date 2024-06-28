@@ -5,4 +5,4 @@ aplikacja odgrywa rolę osobistego asystenta zdrowia, który ma na celu zwiększ
 Analiza dane dotycząca stylu życia, diety, aktywności fizycznej oraz podstawowych parametrów fizjologicznych, będzie w stanie wskazać użytkownikom ich potencjalne ryzyko oraz zaproponować zmiany w nawykach, by temu przeciwdziałać.
 
 ## Uruchomienie aplikacji
-#todo
+streamlit run frontend.py

@@ -45,24 +45,17 @@ def main():
     st.set_page_config(page_title="Obesity Prediction App")
     st.title("Obesity Prediction")
 
-    # # CSS for green background
-    # st.markdown(
-    #     f"""
-    #     <style>
-    #     .appview-container {{
-    #         background-color: green;
-    #     }}
-    #     .sidebar .sidebar-content {{
-    #         background-color: green;
-    #     }}
-    #     .st-emotion-cache-1vzeuhh ew7r33m3 {{
-    #         background-color: yellow;
-    #     }}
-
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True
-    # )
+    # CSS for green background
+    st.markdown(
+        f"""
+        <style>
+        .appview-container {{
+           background: radial-gradient(circle, #3d7c6c, #1b4b53);
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     
 
