@@ -5,7 +5,6 @@ import pickle
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
-# Load the trained model
 model_filename = "ml_models/random_forest_model.pkl"
 model = pickle.load(open(model_filename, 'rb'))
 
@@ -51,10 +50,8 @@ def main():
     st.set_page_config(page_title="HealthMate")
     st.title("HealthMate")
 
-    # Encode image
     image_base64 = get_image_as_base64("avocado.png")
 
-    # Use the encoded image in markdown
     st.markdown(
         f'<div class="img-container"><img src="data:image/png;base64,{image_base64}" alt="avocado" style="width:100%;"></div>',
         unsafe_allow_html=True
@@ -103,7 +100,6 @@ def main():
         CALC = st.radio("Alcohol Consumption Frequency", list(calc_d.keys()), format_func=lambda x: x)
         MTRANS = st.radio("Transportation", list(transport_d.keys()), format_func=lambda x: x)
 
-    # Prepare input data
     input_data = pd.DataFrame({
         'gender': [gender],
         'age': [age],
@@ -123,10 +119,8 @@ def main():
         'transport_mode': [MTRANS]
     })
 
-    # Encode categorical features
     input_data = encode_features(input_data)
 
-    # Make prediction
     if st.button("Predict"):
         prediction = model.predict(input_data)
         prediction_proba = model.predict_proba(input_data)
@@ -144,11 +138,9 @@ def main():
         result = obesity_levels[prediction[0]]
         confidence = prediction_proba[0][prediction[0]] * 100
 
-        # Display prediction
         st.write(f"## Predicted Obesity Level: **{result}**")
         st.write(f"### Confidence: **{confidence:.2f}%**")
 
-         # Add a random health tip if the weight is different than normal
         if result != "Normal Weight":
             health_tips = [
                 "Try to eat more fruits and vegetables.",
