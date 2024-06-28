@@ -77,7 +77,7 @@ def main():
         age = st.slider("Age", min_value=1, max_value=100, value=25)
         gender = st.radio("Gender", list(gender_d.keys()), format_func=lambda x: x)
         height = st.number_input("Height (m)", min_value=1.0, max_value=2.5, value=1.75)
-        weight = st.number_input("Weight (kg)", min_value=30.0, max_value=200.0, value=70.0)
+        weight = st.number_input("Weight (kg)", min_value=30.0, max_value=1000.0, value=70.0)
 
     with col2:
         FCVC = st.slider("Vegetable Consumption Frequency", min_value=1, max_value=3, value=2)
