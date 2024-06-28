@@ -1,12 +1,15 @@
+"""
+Health Mate - Streamlit app for predicting obesity levels based on user inputs.
+"""
 import random
-import streamlit as st
 import base64
 import pickle
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+import streamlit as st
 
-model_filename = "ml_models/random_forest_model.pkl"
-model = pickle.load(open(model_filename, 'rb'))
+MODEL_FILENAME = "ml_models/random_forest_model.pkl"
+model = pickle.load(open(MODEL_FILENAME, 'rb'))
 
 # Feature mappings
 gender_d = {"Female": 0, "Male": 1}
@@ -22,6 +25,9 @@ transport_d = {
 }
 
 def encode_features(df):
+    """
+    Encode categorical features in the DataFrame.
+    """
     le_gender = LabelEncoder()
     le_family_history = LabelEncoder()
     le_highcal_intake = LabelEncoder()
@@ -32,7 +38,8 @@ def encode_features(df):
     le_transport_mode = LabelEncoder()
 
     df['gender'] = le_gender.fit_transform(df['gender'])
-    df['family_history_with_overweight'] = le_family_history.fit_transform(df['family_history_with_overweight'])
+    df['family_history_with_overweight'] = le_family_history.fit_transform(
+        df['family_history_with_overweight'])
     df['highcal_intake'] = le_highcal_intake.fit_transform(df['highcal_intake'])
     df['snacking'] = le_snacking.fit_transform(df['snacking'])
     df['smoke'] = le_smoke.fit_transform(df['smoke'])
@@ -43,10 +50,16 @@ def encode_features(df):
     return df
 
 def get_image_as_base64(image_path):
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
+    """
+    Get the base64 encoding of an image.
+    """
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
 def main():
+    """
+    Main function to run the Streamlit app.
+    """
     st.set_page_config(page_title="HealthMate", page_icon="🥑")
     st.title("HealthMate")
 
@@ -83,22 +96,29 @@ def main():
         FCVC = st.slider("Vegetable Consumption Frequency", min_value=1, max_value=3, value=2)
         NCP = st.slider("Number of Main Meals", min_value=1, max_value=5, value=3)
         CH2O = st.slider("Water Intake (liters)", min_value=1, max_value=3, value=2)
-        FAF = st.slider("Physical Activity Frequency (days per week)", min_value=0, max_value=7, value=2)
+        FAF = st.slider("Physical Activity Frequency (days per week)",
+                         min_value=0, max_value=7, value=2)
         TUE = st.slider("Time using technology devices (hours per day)", min_value=0, max_value=24, value=5)
 
     col3, col4 = st.columns(2)
 
     with col3:
-        SCC = st.radio("Calorie Consumption Monitoring", list(yes_no_d.keys()), format_func=lambda x: x)
-        FAVC = st.radio("High Caloric Food Consumption", list(yes_no_d.keys()), format_func=lambda x: x)
-        SMOKE = st.radio("Do you smoke?", list(yes_no_d.keys()), format_func=lambda x: x)
-        family_history_with_overweight = st.radio("Family History with Overweight", list(yes_no_d.keys()), format_func=lambda x: x)
-        
+        SCC = st.radio("Calorie Consumption Monitoring", list(
+            yes_no_d.keys()), format_func=lambda x: x)
+        FAVC = st.radio("High Caloric Food Consumption", list(
+            yes_no_d.keys()), format_func=lambda x: x)
+        SMOKE = st.radio("Do you smoke?", list(
+            yes_no_d.keys()), format_func=lambda x: x)
+        family_history_with_overweight = st.radio(
+            "Family History with Overweight", list(yes_no_d.keys()), format_func=lambda x: x)       
 
     with col4:
-        CAEC = st.radio("Food Consumption Between Meals", list(caec_d.keys()), format_func=lambda x: x)
-        CALC = st.radio("Alcohol Consumption Frequency", list(calc_d.keys()), format_func=lambda x: x)
-        MTRANS = st.radio("Transportation", list(transport_d.keys()), format_func=lambda x: x)
+        CAEC = st.radio("Food Consumption Between Meals",
+                         list(caec_d.keys()), format_func=lambda x: x)
+        CALC = st.radio("Alcohol Consumption Frequency",
+                         list(calc_d.keys()), format_func=lambda x: x)
+        MTRANS = st.radio("Transportation",
+                         list(transport_d.keys()), format_func=lambda x: x)
 
     input_data = pd.DataFrame({
         'gender': [gender],
