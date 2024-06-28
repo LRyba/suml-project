@@ -1,4 +1,5 @@
 import streamlit as st
+import base64
 import pickle
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -10,8 +11,8 @@ model = pickle.load(open(model_filename, 'rb'))
 # Feature mappings
 gender_d = {"Female": 0, "Male": 1}
 yes_no_d = {"No": 0, "Yes": 1}
-caec_d = {"no": 0, "Sometimes": 1, "Frequently": 2, "Always": 3}
-calc_d = {"no": 0, "Sometimes": 1, "Frequently": 2, "Always": 3}
+caec_d = {"Never": 0, "Sometimes": 1, "Frequently": 2, "Daily": 3}
+calc_d = {"Never": 0, "Sometimes": 1, "Frequently": 2, "Daily": 3}
 transport_d = {
     "Automobile": 0,
     "Bike": 1,
@@ -41,41 +42,65 @@ def encode_features(df):
 
     return df
 
-def main():
-    st.set_page_config(page_title="Obesity Prediction App")
-    st.title("Obesity Prediction")
+def get_image_as_base64(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
 
-    # CSS for green background
+def main():
+    st.set_page_config(page_title="HealthMate")
+    st.title("HealthMate")
+
+    # Encode image
+    image_base64 = get_image_as_base64("avocado.png")
+
+    # Use the encoded image in markdown
     st.markdown(
-        f"""
+        f'<div class="img-container"><img src="data:image/png;base64,{image_base64}" alt="avocado" style="width:100%;"></div>',
+        unsafe_allow_html=True
+    )
+    
+    st.markdown(
+        """
         <style>
-        .appview-container {{
-           background: radial-gradient(circle, #5EAA9A, #34746c);
-        }}
+        .appview-container {
+            background: radial-gradient(circle, #5EAA9A, #34746c);
+        }
+        .img-container img {
+            max-height: 600px;
+        }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    
-
     # Input fields
-    gender = st.radio("Gender", list(gender_d.keys()), format_func=lambda x: x)
-    age = st.slider("Age", min_value=1, max_value=100, value=25)
-    height = st.number_input("Height (m)", min_value=1.0, max_value=2.5, value=1.75)
-    weight = st.number_input("Weight (kg)", min_value=30.0, max_value=200.0, value=70.0)
-    family_history_with_overweight = st.radio("Family History with Overweight", list(yes_no_d.keys()), format_func=lambda x: x)
-    FAVC = st.radio("High Caloric Food Consumption", list(yes_no_d.keys()), format_func=lambda x: x)
-    FCVC = st.slider("Vegetable Consumption Frequency", min_value=1, max_value=3, value=2)
-    NCP = st.slider("Number of Main Meals", min_value=1, max_value=5, value=3)
-    CAEC = st.radio("Food Consumption Between Meals", list(caec_d.keys()), format_func=lambda x: x)
-    SMOKE = st.radio("Do you smoke?", list(yes_no_d.keys()), format_func=lambda x: x)
-    CH2O = st.slider("Water Intake (liters)", min_value=1, max_value=3, value=2)
-    SCC = st.radio("Calorie Consumption Monitoring", list(yes_no_d.keys()), format_func=lambda x: x)
-    FAF = st.slider("Physical Activity Frequency (days per week)", min_value=0, max_value=7, value=2)
-    TUE = st.slider("Time using technology devices (hours per day)", min_value=0, max_value=24, value=5)
-    CALC = st.radio("Alcohol Consumption Frequency", list(calc_d.keys()), format_func=lambda x: x)
-    MTRANS = st.radio("Transportation Mode", list(transport_d.keys()), format_func=lambda x: x)
+    col1, col2 = st.columns(2)
+    with col1:
+        age = st.slider("Age", min_value=1, max_value=100, value=25)
+        gender = st.radio("Gender", list(gender_d.keys()), format_func=lambda x: x)
+        height = st.number_input("Height (m)", min_value=1.0, max_value=2.5, value=1.75)
+        weight = st.number_input("Weight (kg)", min_value=30.0, max_value=200.0, value=70.0)
+
+    with col2:
+        FCVC = st.slider("Vegetable Consumption Frequency", min_value=1, max_value=3, value=2)
+        NCP = st.slider("Number of Main Meals", min_value=1, max_value=5, value=3)
+        CH2O = st.slider("Water Intake (liters)", min_value=1, max_value=3, value=2)
+        FAF = st.slider("Physical Activity Frequency (days per week)", min_value=0, max_value=7, value=2)
+        TUE = st.slider("Time using technology devices (hours per day)", min_value=0, max_value=24, value=5)
+
+    col3, col4 = st.columns(2)
+
+    with col3:
+        SCC = st.radio("Calorie Consumption Monitoring", list(yes_no_d.keys()), format_func=lambda x: x)
+        FAVC = st.radio("High Caloric Food Consumption", list(yes_no_d.keys()), format_func=lambda x: x)
+        SMOKE = st.radio("Do you smoke?", list(yes_no_d.keys()), format_func=lambda x: x)
+        family_history_with_overweight = st.radio("Family History with Overweight", list(yes_no_d.keys()), format_func=lambda x: x)
+        
+
+    with col4:
+        CAEC = st.radio("Food Consumption Between Meals", list(caec_d.keys()), format_func=lambda x: x)
+        CALC = st.radio("Alcohol Consumption Frequency", list(calc_d.keys()), format_func=lambda x: x)
+        MTRANS = st.radio("Transportation", list(transport_d.keys()), format_func=lambda x: x)
 
     # Prepare input data
     input_data = pd.DataFrame({
