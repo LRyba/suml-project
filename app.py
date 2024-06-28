@@ -47,7 +47,7 @@ def get_image_as_base64(image_path):
             return base64.b64encode(img_file.read()).decode()
 
 def main():
-    st.set_page_config(page_title="HealthMate")
+    st.set_page_config(page_title="HealthMate", page_icon="🥑")
     st.title("HealthMate")
 
     image_base64 = get_image_as_base64("avocado.png")
