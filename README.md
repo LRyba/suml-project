@@ -5,7 +5,7 @@ aplikacja odgrywa rolę osobistego asystenta zdrowia, który ma na celu zwiększ
 Analiza dane dotycząca stylu życia, diety, aktywności fizycznej oraz podstawowych parametrów fizjologicznych, będzie w stanie wskazać użytkownikom ich potencjalne ryzyko oraz zaproponować zmiany w nawykach, by temu przeciwdziałać.
 
 ## Uruchomienie aplikacji
-streamlit run app.py
+`streamlit run app.py`
 
 ## Wytrenowanie modelu (opcjonalnie)
-python .\model_training\model_train.py
+`python .\model_training\model_train.py`
