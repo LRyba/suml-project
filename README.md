@@ -7,5 +7,9 @@ Analiza dane dotycząca stylu życia, diety, aktywności fizycznej oraz podstawo
 ## Uruchomienie aplikacji
 `streamlit run app.py`
 
+### Docker
+`docker build -t app.py .`
+`docker run -p 8501:8501 app.py`
+
 ## Wytrenowanie modelu (opcjonalnie)
 `python .\model_training\model_train.py`
